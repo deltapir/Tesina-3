@@ -21,19 +21,27 @@ s0=refpropm('s','t',T0+273.15,'p',p1*100,fluid)/1000;
 T4=refpropm('t','p',p1*100,'q',1,fluid)-273.15;
 h4=refpropm('h','p',p1*100,'q',1,fluid)/1000;
 s4=refpropm('s','p',p1*100,'q',1,fluid)/1000;
-
-pmax=20; %[bar] ipotesi della pressione massima
-pvar=linspace(p1,pmax,40);
+pc=refpropm('p','c',0,'',0,fluid)/100;
+pmax=pc-4; %[bar] ipotesi della pressione massima
+max=10;
+pvar=linspace(p1,pmax,max);
 for i=1:length(pvar);
+    p2(i)=pvar(i);
+    
+    Tl(i)=refpropm('t','p',p2(i)*100,'q',0,fluid)-273.15;
+    Tv(i)=refpropm('t','p',p2(i)*100,'q',1,fluid)-273.15;
+    sl(i)=refpropm('s','p',p2(i)*100,'q',0,fluid)/1000;
+    sv(i)=refpropm('s','p',p2(i)*100,'q',1,fluid)/1000;
+    Tc=refpropm('t','c',0,'',0,fluid)-273.15;
+    sc=refpropm('s','c',0,'',0,fluid)/1000;
     %punto 2
-    p2(i)=pmax;
     T2(i)=T0;
     h2(i)=refpropm('h','t',T0+273.15,'p',p2(i)*100,fluid)/1000;
     s2(i)=refpropm('s','t',T2(i)+273.15,'p',p2(i)*100,fluid)/1000;
     %punto 3
-    h3(i)=h4;
-    T3(i)=refpropm('t','p',p2(i)*100,'h',h3(i)*1000,fluid)-273.15;
-    s3(i)=refpropm('s','t',T3(i)+273.15,'p',p2(i)*100,fluid)/1000;
+    s3(i)=s4;
+    T3(i)=refpropm('t','p',p2(i)*100,'s',s3(i)*1000,fluid)-273.15;
+    h3(i)=refpropm('s','t',T3(i)+273.15,'p',p2(i)*100,fluid)/1000;
     %punto 5
     T5(i)=refpropm('t','p',p2(i)*100,'q',0,fluid)-273.15;
     s5(i)=refpropm('s','t',T5(i)+273.15,'q',0,fluid)/1000;
@@ -49,23 +57,27 @@ for i=1:length(pvar);
     h7(i)=refpropm('h','t',T7(i)+273.15,'q',0,fluid)/1000;
     s7(i)=refpropm('s','t',T7(i)+273.15,'q',0,fluid)/1000;
     %bilanci
-    Lc(i)=m1*(h2(i)-h0);
+    Lc(i)=m1*(h0-h2(i));
 end
-
-
+sl(i+1)=sc;
+sv(i+1)=sc;
+Tl(i+1)=Tc;
+Tv(i+1)=Tc;
 
 figure(1);
+plot(sl,Tl,'b',sv,Tv,'r');
+hold on
 plot(s0,T0,'o')
 hold on
-plot(s2(20),T2,'o')
+plot(s2(max),T2,'o')
 hold on
-plot(s3(20),T3,'o')
+plot(s3,T3,'o')
 hold on
 plot(s4,T4,'o')
 hold on
-plot(s5(20),T5,'o')
+plot(s5(max),T5(max),'o')
 hold on
-plot(s6(20),T6(20),'ok')
+plot(s6(max),T6(max),'ok')
 hold on
-plot(s7(20),T7,'o')
+plot(s7(max),T7(max),'o')
 
