@@ -99,6 +99,7 @@ for i=1:length(pvar);
     h10p(i)=refpropm('h','p',p10p(i)*100,'s',s10p(i)*1000,fluid)/1000;
     %bilanci ancora
     %lavoro compressori interrefrigerati
+    Lc(i)=m1*(h1p(i)-h1(i)+h10p(i)-h10(i)); %+(T0+273.15)*(s1(i)-s2(i))
     Lt(i)=m4(i)*(h3(i)-h4);
     eta(i)=Lt(i)/Lc(i);
 end
