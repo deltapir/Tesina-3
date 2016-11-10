@@ -34,7 +34,7 @@ for i=1:length(pvar);
     %punto 3
     s3(i)=s4;
     T3(i)=refpropm('t','p',p2(i)*100,'s',s3(i)*1000,fluid)-273.15;
-    h3(i)=refpropm('h','t',T3(i)+273.15,'p',p2(i)*100,fluid)/1000;
+    h3(i)=refpropm('s','t',T3(i)+273.15,'p',p2(i)*100,fluid)/1000;
     %punto 5
     T5(i)=refpropm('t','p',p2(i)*100,'q',0,fluid)-273.15;
     s5(i)=refpropm('s','t',T5(i)+273.15,'q',0,fluid)/1000;
@@ -132,7 +132,7 @@ title('RENDIMENTOvsPRESSIONEmax');
 
 figure(5)
 plot(pvar,Lt,pvar,Lc,pvar,Qc)
-legend('Lavoro Turbina','Lavoro Compressori','Calore asportato')
+legend('Lavoro Turbina','Lavoro 
 
 figure(1);
 plot(sl,Tl,'b',sv,Tv,'r');
