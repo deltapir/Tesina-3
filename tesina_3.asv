@@ -99,10 +99,9 @@ for i=1:length(pvar);
     h10p(i)=refpropm('h','p',p10p(i)*100,'s',s10p(i)*1000,fluid)/1000;
     %bilanci ancora
     %lavoro compressori interrefrigerati
-    Lc(i)=m1*(h1p(i)-h1(i)+h10p(i)-h10(i)+);
-    %Qc(i)=m1*(h1p(i)-h10(i)+h10p(i)-h2(i));
+    Lc(i)=m1*(h1p(i)-h1(i)+h10p(i)-h10(i)+(T0+273.15)*(s1(i)-s2(i))); 
     Lt(i)=m4(i)*(h3(i)-h4);
-    eta(i)=Lt(i)/(Lc(i)+Qc(i));
+%     eta(i)=Lt(i)/Lc(i);
 end
 pvar1=linspace(p1,pmax,max);
 for i=1:length(pvar1)
@@ -131,7 +130,7 @@ plot(pvar,eta)
 title('RENDIMENTOvsPRESSIONEmax');
 
 figure(5)
-plot(pvar,Lt,pvar,Lc,pvar,Qc)
+plot(pvar,Lt,pvar,Lc)
 legend('Lavoro Turbina','Lavoro Compressori','Calore asportato')
 
 figure(1);

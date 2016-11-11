@@ -24,7 +24,7 @@ s4=refpropm('s','p',p1*100,'q',1,fluid)/1000;
 pc=refpropm('p','c',0,'',0,fluid)/100;
 pmax=pc-0.8; %[bar] ipotesi della pressione massima (più mi avvicino alla pressione critica e più il valore di y supera l'1.
 max=100;
-pvar=linspace(p1+0.001,pmax,max);
+pvar=linspace(p1+2,pmax,max);
 for i=1:length(pvar);
     p2(i)=pvar(i);
     %punto 2
@@ -81,7 +81,7 @@ for i=1:length(pvar);
     h8(i)=refpropm('h','t',T8(i)+273.15,'s',s8(i)*1000,fluid)/1000;
     
     %bilanci
-    Lc(i)=m1*(h0-h2(i));
+%     Lreale(i)=m1*(h0-h2(i));
     h1(i)=q6(i)*h8(i)+(1-q6(i))*h0;     %ho usato il titolo nel punto 6.
     T1(i)=refpropm('t','p',p1*100,'h',h1(i)*1000,fluid)-273.15;
     s1(i)=refpropm('s','t',T1(i)+273.15,'p',p1*100,fluid)/1000;
@@ -98,10 +98,11 @@ for i=1:length(pvar);
     T10p(i)=refpropm('t','p',p10p(i)*100,'s',s10p(i)*1000,fluid)-273.15;
     h10p(i)=refpropm('h','p',p10p(i)*100,'s',s10p(i)*1000,fluid)/1000;
     %bilanci ancora
+    Z(i)=m7(i)/m1;
     %lavoro compressori interrefrigerati
-    Lc(i)=m1*(h1p(i)-h1(i)+h10p(i)-h10(i)); %+(T0+273.15)*(s1(i)-s2(i))
-    Lt(i)=m4(i)*(h3(i)-h4);
-    eta(i)=Lt(i)/Lc(i);
+    Lreale(i)=(h1p(i)-h1(i)+h10p(i)-h10(i)-(h3(i)-h4)*y(i))/Z(i); 
+    Lmin(i)=(T0+273.15)*(s0-s7(i))-(h0-h7(i));
+    eta(i)=Lmin(i)/Lreale(i);
 end
 pvar1=linspace(p1,pmax,max);
 for i=1:length(pvar1)
@@ -122,16 +123,16 @@ plot(pvar,y)
 title('Y vs Pmax')
 
 figure(3)
-plot(pvar,m4,pvar,m7)
-legend('Portata in 4','Portata liquefatta-da integrare')
+plot(pvar,m4,pvar,m7,Z,pvar)
+legend('Portata in 4','Portata liquefatta-da integrare','Z')
 
 figure(4)
 plot(pvar,eta)
-title('RENDIMENTOvsPRESSIONEmax');
+title('\etavsPRESSIONEmax');
 
 figure(5)
-plot(pvar,Lt,pvar,Lc)
-legend('Lavoro Turbina','Lavoro Compressori','Calore asportato')
+plot(pvar,Lmin,pvar,Lreale)
+legend('Lavoro minimo','Lavoro reale')
 
 figure(1);
 plot(sl,Tl,'b',sv,Tv,'r');
